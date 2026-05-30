@@ -6,7 +6,7 @@
 
 ## Table of Contents
 
-- [Overview](#overview)
+- [Overview](#overviews)
 - [Prerequisites](#prerequisites)
 - [Hosting Setup](#hosting-setup)
 - [Environment Variables](#environment-variables)
