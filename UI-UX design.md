@@ -1,805 +1,793 @@
 
-
-## What is this week about?
-
-Designing the **user interface** and **user experience** for the Aussie Realestate Website – creating wireframes, defining user flows, and designing UI components.
+> **Deliverable:** Wireframes and Screen Designs  
+> **Activities:** Create wireframes · Define user flows · Design UI components
 
 ---
 
-## Key Questions Answered
+## Table of Contents
 
-| Question | Answer |
-|----------|--------|
-| **What are the main screens?** | Home, Search Results, Listing Details, Login/Register, Agent Dashboard, Admin Dashboard |
-| **How will users navigate?** | Navigation bar with role-based menus, search bar on all pages, breadcrumbs for deep navigation |
-| **What is the design style?** | Clean, modern, mobile-first, trust-focused with Australian design elements |
-
----
-
-## Activities Done
-
-| Activity | What We Did |
-|----------|-------------|
-| Create wireframes | Designed low-fidelity wireframes for 8 core screens |
-| Define user flows | Mapped 5 key user journeys (buyer, renter, agent, admin) |
-| Design UI components | Created component library (buttons, cards, forms, modals) |
-| Establish design system | Defined colours, typography, spacing, and breakpoints |
-| Responsive design | Designed for mobile, tablet, and desktop breakpoints |
+- [Overview](#overview)
+- [Design Principles](#design-principles)
+- [User Personas](#user-personas)
+- [Information Architecture](#information-architecture)
+- [User Flows](#user-flows)
+- [Main Screens & Wireframes](#main-screens--wireframes)
+- [UI Component Library](#ui-component-library)
+- [Navigation Structure](#navigation-structure)
+- [Responsive Breakpoints](#responsive-breakpoints)
+- [Accessibility Standards](#accessibility-standards)
+- [Design Tokens](#design-tokens)
+- [Tooling & Assets](#tooling--assets)
 
 ---
 
-## 1. User Flows
+## Overview
 
-### Flow 1: Guest Buyer Journey
-┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐
-│ Enter │───▶│ Search │───▶│ Filter │───▶│ View │───▶│ Contact │
-│ Website │ │ Results │ │ Results │ │ Details │ │ Agent │
-└─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘
-│
-┌────▼────┐
-│Register │
-│ to Save │
-└─────────┘
-
-text
-
-### Flow 2: Registered User Journey
-┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐
-│ Login │───▶│ Search │───▶│ Save │───▶│ View │───▶│Compare │
-│ │ │ │ │Favourite│ │Favourites│ │Listings │
-└─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘
-
-text
-
-### Flow 3: Agent Journey
-┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐
-│ Login │───▶│Dashboard│───▶│ Create │───▶│ Upload │───▶│ View │
-│ │ │ │ │ Listing │ │ Images │ │ Stats │
-└─────────┘ └─────────┘ └─────────┘ └─────────┘ └─────────┘
-
-text
-
-### Flow 4: Admin Journey
-┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐
-│ Login │───▶│Admin │───▶│ Manage │───▶│ Generate│
-│ │ │Dashboard│ │ Users │ │ Report │
-└─────────┘ └─────────┘ └─────────┘ └─────────┘
-│
-▼
-┌─────────────┐
-│ Delete Any │
-│ Listing │
-└─────────────┘
-
-text
+| Item               | Details                                      |
+|--------------------|----------------------------------------------|
+| **Design Tool**    | Figma / Adobe XD / Sketch                   |
+| **Prototype URL**  | https://figma.com/proto/your-project-link   |
+| **Design System**  | Custom / Tailwind / Material Design 3        |
+| **Platforms**      | Web (Desktop + Mobile), iOS, Android         |
+| **Primary Users**  | Customers, Admins                            |
+| **Accessibility**  | WCAG 2.1 Level AA                            |
 
 ---
 
-## 2. Main Screens
+## Design Principles
 
-### Screen 1: Home Page
-
-| Section | Content |
-|---------|---------|
-| **Header** | Logo, Navigation (Home, Browse, Login/Register), Search Bar |
-| **Hero Section** | Background image of Australian property, tagline "Find Your Dream Home in Australia" |
-| **Search Bar** | Prominent search: "Enter suburb, postcode or address" |
-| **Popular Filters** | Quick chips: Houses, Apartments, Rentals, Under $500k, Under $1M |
-| **Featured Listings** | Carousel of premium property cards (image, price, address, beds/baths) |
-| **How It Works** | 3-step guide: Search → Compare → Contact |
-| **Footer** | Links, contact info, copyright |
-
-### Screen 2: Search Results Page
-
-| Section | Content |
-|---------|---------|
-| **Header** | Sticky header with search bar and filters |
-| **Filter Sidebar (Desktop)** | Price range slider, bedrooms, property type, suburb dropdown |
-| **Filter Bar (Mobile)** | Collapsible filter panel at top |
-| **Results Header** | "245 properties found", sort dropdown (Price low-high, newest first) |
-| **Listing Grid** | 12 cards per page (image, price, address, beds/baths, land size) |
-| **Map View Toggle** | Button to switch between grid and map view |
-| **Pagination** | Page numbers, next/prev buttons |
-| **Map Panel** | Interactive map with property markers (when map view enabled) |
-
-### Screen 3: Listing Detail Page
-
-| Section | Content |
-|---------|---------|
-| **Image Gallery** | Main image carousel with thumbnail strip (max 5 images) |
-| **Price & Address** | Large price, full address with map link |
-| **Key Details** | Bedrooms, bathrooms, car spaces, land size, property type |
-| **Description** | Full property description (if provided by agent) |
-| **Features** | Bullet list: air conditioning, pool, garage, etc. |
-| **Agent Info** | Agent name, phone, email, profile picture |
-| **Save Button** | "Save to Favourites" (visible when logged in) |
-| **Similar Listings** | Recommended properties in same suburb |
-| **Location Map** | Embedded map showing property location |
-
-### Screen 4: Login Page
-
-| Section | Content |
-|---------|---------|
-| **Form** | Email field, Password field, Login button |
-| **Links** | "Forgot password?", "Don't have an account? Register" |
-| **Social Login** | Optional: Google login button |
-
-### Screen 5: Register Page
-
-| Section | Content |
-|---------|---------|
-| **Form** | Full name, Email, Password (strength indicator), Confirm password |
-| **Role Selector** | Radio buttons: I'm a buyer/renter, I'm an agent |
-| **Terms Checkbox** | "I agree to Terms & Conditions" |
-| **Register Button** | Submit registration |
-| **Login Link** | "Already have an account? Login" |
-
-### Screen 6: Agent Dashboard
-
-| Section | Content |
-|---------|---------|
-| **Header** | Welcome message, "Add New Listing" button |
-| **Stats Cards** | Total listings, Active listings, Total views, Average views per listing |
-| **Listings Table** | Image, Title, Price, Status (active/sold), Views, Actions (Edit/Delete) |
-| **Chart** | Weekly views trend (simple bar chart) |
-| **Quick Actions** | Edit profile, View public profile |
-
-### Screen 7: Admin Dashboard
-
-| Section | Content |
-|---------|---------|
-| **Header** | Welcome admin, date range picker |
-| **Stats Cards** | Total users, Total agents, Total listings, Total views |
-| **User Table** | List of users with role, status, actions (suspend/delete) |
-| **Listings Table** | All listings with agent info, status, delete button |
-| **Weekly Trends Chart** | User registrations and listings created over last 7 days |
-| **System Health** | Uptime, API response time, database status |
-
-### Screen 8: Favourites Page (Registered Users)
-
-| Section | Content |
-|---------|---------|
-| **Header** | "My Saved Properties" |
-| **Favourites Grid** | Saved listing cards (image, price, address, remove button) |
-| **Empty State** | "No saved properties yet. Start browsing!" with Browse button |
+| #  | Principle         | Description                                                                 |
+|----|-------------------|-----------------------------------------------------------------------------|
+| 1  | **Clarity**       | Every screen has one primary action. No cognitive overload.                  |
+| 2  | **Consistency**   | Components, spacing, and language behave the same across all screens.        |
+| 3  | **Feedback**      | Every user action receives immediate visual or textual feedback.             |
+| 4  | **Accessibility** | Legible contrast, keyboard navigation, and screen-reader-friendly markup.    |
+| 5  | **Mobile-first**  | Designed for small screens first, progressively enhanced for larger ones.    |
+| 6  | **Progressive Disclosure** | Show only what users need at each step; reveal complexity on demand. |
 
 ---
 
-## 3. Navigation Structure
-Home
-└── Search Results
-└── Listing Details
-└── Contact Agent Modal
+## User Personas
 
-Browse (same as Search Results)
+### Persona 1 — The Everyday Customer
 
-Login
-└── Register
-└── Forgot Password
+```
+┌─────────────────────────────────────────────────────┐
+│  👤  Jamie, 28 — Online Shopper                     │
+│─────────────────────────────────────────────────────│
+│  Goals:                                             │
+│   • Quickly find and purchase what they need        │
+│   • Track order status easily                       │
+│   • Leave feedback on purchases                     │
+│                                                     │
+│  Pain Points:                                       │
+│   • Long checkout flows                             │
+│   • Confusing navigation                            │
+│   • Poor mobile experience                         │
+│                                                     │
+│  Device:  Primarily mobile (iPhone)                 │
+│  Tech:    Comfortable with apps; avoids manuals     │
+└─────────────────────────────────────────────────────┘
+```
 
-Dashboard (Agent only)
-└── Create Listing
-└── Edit Listing
+### Persona 2 — The Admin / Store Manager
 
-Dashboard (Admin only)
-└── Manage Users
-└── System Reports
-
-Favourites (Registered User only)
-
-text
-
----
-
-## 4. Responsive Breakpoints
-
-| Breakpoint | Screen Width | Layout Adjustments |
-|------------|--------------|---------------------|
-| **Mobile** | < 768px | Single column, bottom navigation bar, collapsible filters |
-| **Tablet** | 768px - 1024px | 2-column grid, sidebar becomes top bar |
-| **Desktop** | > 1024px | 3-column or 4-column grid, persistent filter sidebar |
-
----
-
-## 5. Design System
-
-### Colour Palette
-
-| Colour Name | Hex Code | Usage |
-|-------------|----------|-------|
-| Primary Blue | `#1E3A8A` | Buttons, links, header background |
-| Secondary Blue | `#3B82F6` | Hover states, active filters |
-| Accent Orange | `#F59E0B` | Price highlights, sale badges |
-| Success Green | `#10B981` | Active status, success messages |
-| Error Red | `#EF4444` | Error messages, delete buttons |
-| Neutral Dark | `#1F2937` | Body text |
-| Neutral Gray | `#6B7280` | Secondary text, borders |
-| Neutral Light | `#F3F4F6` | Background, card backgrounds |
-| White | `#FFFFFF` | Card backgrounds, form inputs |
-
-### Typography
-
-| Element | Font | Size | Weight | Line Height |
-|---------|------|------|--------|-------------|
-| Heading 1 | Inter | 32px | Bold | 1.2 |
-| Heading 2 | Inter | 24px | Semibold | 1.3 |
-| Heading 3 | Inter | 20px | Semibold | 1.4 |
-| Body Text | Inter | 16px | Regular | 1.5 |
-| Small Text | Inter | 14px | Regular | 1.4 |
-| Price Text | Inter | 24px | Bold | 1.2 |
-
-### Spacing Scale
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| xs | 4px | Icon spacing |
-| sm | 8px | Small gaps |
-| md | 16px | Default padding |
-| lg | 24px | Section margins |
-| xl | 32px | Large sections |
-| 2xl | 48px | Page margins |
-
-### UI Components
-
-| Component | Description | States |
-|-----------|-------------|--------|
-| **Button** | Rounded corners, filled/outlined variants | Default, Hover, Active, Disabled |
-| **Card** | White background, border, shadow on hover | Default, Hover |
-| **Input** | Border, rounded corners, label above | Default, Focus, Error |
-| **Dropdown** | Select menu with chevron | Default, Open |
-| **Checkbox** | Square with tick | Unchecked, Checked |
-| **Radio** | Circle with dot | Unchecked, Checked |
-| **Slider** | Price range selector | Dragging |
-| **Modal** | Centered popup with overlay | Open, Closed |
-| **Badge** | Small status indicator | Active, Sold, Rent |
-| **Pagination** | Page numbers with next/prev | Active, Disabled |
+```
+┌─────────────────────────────────────────────────────┐
+│  👤  Morgan, 35 — Operations Manager                │
+│─────────────────────────────────────────────────────│
+│  Goals:                                             │
+│   • Manage products and inventory quickly           │
+│   • Monitor order pipeline                         │
+│   • View sales metrics at a glance                  │
+│                                                     │
+│  Pain Points:                                       │
+│   • Too many clicks to update a product             │
+│   • No clear overview of pending orders             │
+│   • Lack of bulk action support                     │
+│                                                     │
+│  Device:  Desktop (Chrome on Windows)               │
+│  Tech:    Power user; comfortable with dashboards   │
+└─────────────────────────────────────────────────────┘
+```
 
 ---
 
-## 6. Wireframe Descriptions (Text-Based)
+## Information Architecture
 
-### Home Page Wireframe
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ [LOGO] Home Browse [Search Bar................] [Login] [Register] │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ │
-│ FIND YOUR DREAM HOME IN AUSTRALIA │
-│ │
-│ ┌─────────────────────────────────────────────────────────────────────┐ │
-│ │ [🔍] Enter suburb, postcode or address............ [Search] │ │
-│ └─────────────────────────────────────────────────────────────────────┘ │
-│ │
-│ Popular: [Houses] [Apartments] [Rentals] [Under 
-500
-k
-]
-[
-U
-n
-d
-e
-r
-500k][Under1M] │
-│ │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ FEATURED LISTINGS │
-│ │
-│ ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐ │
-│ │ [IMG] │ │ [IMG] │ │ [IMG] │ │ [IMG] │ │
-│ │ 
-850
-,
-000
-││
-850,000││1,200,000│ │ 
-550
-/
-w
-e
-e
-k
-││
-550/week││950,000 │ │
-│ │ 3 beds │ │ 4 beds │ │ 2 beds │ │ 3 beds │ │
-│ │ SurryHills│ │ Bondi │ │ Parramatta│ │ Chatswood │ │
-│ └────────────┘ └────────────┘ └────────────┘ └────────────┘ │
-│ │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ HOW IT WORKS │
-│ │
-│ ┌────────┐ ┌────────┐ ┌────────┐ │
-│ │ 🔍 │ ───▶ │ 📋 │ ───▶ │ 📞 │ │
-│ │ Search │ │Compare │ │Contact │ │
-│ └────────┘ └────────┘ └────────┘ │
-│ │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ [Footer: About | Contact | Privacy | Terms | © 2026 Aussie Realestate] │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-text
-
-### Search Results Page Wireframe
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ [LOGO] Home Browse [Search Bar................] [👤] [Favourites] │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ │
-│ ┌──────────────┐ ┌────────────────────────────────────────────────────┐ │
-│ │ FILTERS │ │ 245 properties found Sort: [Price low-high ▼] │ │
-│ │ │ │ [Grid] [Map] │ │
-│ │ Price Range │ ├────────────────────────────────────────────────────┤ │
-│ │ [
-0
-────
-0────1.5M]│ │ │ │
-│ │ │ │ ┌────────────┐ ┌────────────┐ ┌────────────┐ │ │
-│ │ Bedrooms │ │ │ [IMG] │ │ [IMG] │ │ [IMG] │ │ │
-│ │ [✓] 1+ [✓]2+ │ │ │ 
-850
-,
-000
-││
-850,000││1,200,000 │ │ 
-550
-/
-w
-e
-e
-k
-│││││
-[
-]
-3
-+
-[
-]
-4
-+
-│││
-3
-b
-e
-d
-s
-││
-4
-b
-e
-d
-s
-││
-2
-b
-e
-d
-s
-││││││││
-S
-u
-r
-r
-y
-H
-i
-l
-l
-s
-││
-B
-o
-n
-d
-i
-││
-P
-a
-r
-r
-a
-m
-a
-t
-t
-a
-│││││
-P
-r
-o
-p
-e
-r
-t
-y
-T
-y
-p
-e
-││
-└
-────────────
-┘
-└
-────────────
-┘
-└
-────────────
-┘
-││││
-[
-✓
-]
-H
-o
-u
-s
-e
-││││││
-[
-]
-A
-p
-a
-r
-t
-m
-e
-n
-t
-││
-┌
-────────────
-┐
-┌
-────────────
-┐
-┌
-────────────
-┐
-││││
-[
-]
-T
-o
-w
-n
-h
-o
-u
-s
-e
-│││
-[
-I
-M
-G
-]
-││
-[
-I
-M
-G
-]
-││
-[
-I
-M
-G
-]
-││││││││
-550/week│││││[]3+[]4+│││3beds││4beds││2beds││││││││SurryHills││Bondi││Parramatta│││││PropertyType││└────────────┘└────────────┘└────────────┘││││[✓]House││││││[]Apartment││┌────────────┐┌────────────┐┌────────────┐││││[]Townhouse│││[IMG]││[IMG]││[IMG]││││││││950,000 │ │ 
-1
-,
-350
-,
-000
-││
-1,350,000││480/week │ │ │
-│ │ Suburb │ │ │ 3 beds │ │ 5 beds │ │ 1 bed │ │ │
-│ │ [Select...] │ │ │ Chatswood │ │ Mosman │ │ Lidcombe │ │ │
-│ │ │ │ └────────────┘ └────────────┘ └────────────┘ │ │
-│ │ [Apply] │ │ │ │
-│ │ [Clear] │ │ ┌────────────────────────────────────────────────┐ │ │
-│ └──────────────┘ │ │ ◀ 1 2 3 4 ... 12 ▶ │ │ │
-│ │ └────────────────────────────────────────────────┘ │ │
-│ └────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-text
-
-### Listing Detail Page Wireframe
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ [LOGO] Home Browse [Search Bar................] [👤] [Favourites] │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ │
-│ ┌─────────────────────────────────────┐ ┌─────────────────────────────┐ │
-│ │ MAIN IMAGE │ │ $850,000 │ │
-│ │ │ │ 123 Main Street │ │
-│ │ │ │ Surry Hills NSW 2010 │ │
-│ │ │ │ │ │
-│ │ ┌───┐ ┌───┐ ┌───┐ ┌───┐ ┌───┐ │ │ 🛏 3 beds 🚽 2 baths │ │
-│ │ │IMG│ │IMG│ │IMG│ │IMG│ │IMG│ │ │ 🚗 2 cars 📐 450m² land │ │
-│ │ └───┘ └───┘ └───┘ └───┘ └───┘ │ │ │ │
-│ └─────────────────────────────────────┘ │ Property Type: House │ │
-│ │ Status: Active │ │
-│ Description │ │ │
-│ Beautiful family home in the heart... │ ┌─────────────────────────┐│ │
-│ │ │ Save to Favourites ││ │
-│ Features │ └─────────────────────────┘│ │
-│ ✓ Air conditioning ✓ Pool │ │ │
-│ ✓ Garage ✓ Garden │ 👤 Agent │ │
-│ │ John Doe │ │
-│ Location Map │ 📞 0412 345 678 │ │
-│ ┌─────────────────────────────────────┐ │ ✉️ john@realestate.com │ │
-│ │ [MAP] │ └─────────────────────────────┘ │
-│ └─────────────────────────────────────┘ │
-│ │
-│ Similar Listings │
-│ ┌────────────┐ ┌────────────┐ ┌────────────┐ │
-│ │ [IMG] │ │ [IMG] │ │ [IMG] │ │
-│ └────────────┘ └────────────┘ └────────────┘ │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-text
-
-### Agent Dashboard Wireframe
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ [LOGO] Dashboard Listings Profile [Logout] [👤 John] │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ │
-│ Welcome back, John! [+ New Listing] │
-│ │
-│ ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐ │
-│ │ Total │ │ Active │ │ Total │ │ Avg Views │ │
-│ │ Listings │ │ Listings │ │ Views │ │ per Listing│ │
-│ │ 12 │ │ 8 │ │ 2,450 │ │ 204 │ │
-│ └────────────┘ └────────────┘ └────────────┘ └────────────┘ │
-│ │
-│ Weekly Views Trend │
-│ ┌─────────────────────────────────────────────────────────────────────┐ │
-│ │ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ │ │
-│ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │
-│ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │
-│ │ └──┘ └──┘ └──┘ └──┘ └──┘ └──┘ └──┘ │ │
-│ │ Mon Tue Wed Thu Fri Sat Sun │ │
-│ └─────────────────────────────────────────────────────────────────────┘ │
-│ │
-│ My Listings │
-│ ┌─────────────────────────────────────────────────────────────────────┐ │
-│ │ Image │ Title │ Price │ Status │ Views │ Actions │ │
-│ ├───────┼─────────────────┼──────────┼────────┼───────┼───────────────┤ │
-│ │ [IMG] │ Modern Apt │ 
-850
-k
+```
+App
+├── Public (Unauthenticated)
+│   ├── Home / Landing Page
+│   ├── Product Listing
+│   ├── Product Detail
+│   ├── Search Results
+│   ├── Login
+│   └── Register
 │
-A
-c
-t
-i
-v
-e
+├── Customer (Authenticated)
+│   ├── Dashboard / Home Feed
+│   ├── Browse Products
+│   │   ├── Category Filter
+│   │   └── Search
+│   ├── Product Detail
+│   │   └── Write Review
+│   ├── Cart
+│   ├── Checkout
+│   │   ├── Shipping Details
+│   │   ├── Payment
+│   │   └── Order Confirmation
+│   ├── My Orders
+│   │   └── Order Detail
+│   └── My Profile
+│       └── Edit Profile
 │
-320
-│
-[
-✏
-®
-]
-[
-🗑
-®
-]
-││││
-[
-I
-M
-G
-]
-│
-F
-a
-m
-i
-l
-y
-H
-o
-m
-e
-│
-850k│Active│320│[✏ 
-R
-◯
- ][🗑 
-R
-◯
- ]││││[IMG]│FamilyHome│1.2M │ Active │ 450 │ [✏️] [🗑️] │ │
-│ │ [IMG] │ Studio │ $480k │ Sold │ 120 │ [✏️] [🗑️] │ │
-│ └─────────────────────────────────────────────────────────────────────┘ │
-│ │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-text
-
-### Admin Dashboard Wireframe
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ [LOGO] Dashboard Users Listings Reports [Logout] [👤 Admin] │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ │
-│ Admin Dashboard Date: [Last 7 days ▼] │
-│ │
-│ ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐ │
-│ │ Total │ │ Total │ │ Total │ │ Total │ │
-│ │ Users │ │ Agents │ │ Listings │ │ Views │ │
-│ │ 150 │ │ 25 │ │ 320 │ │ 18,750 │ │
-│ └────────────┘ └────────────┘ └────────────┘ └────────────┘ │
-│ │
-│ Weekly Trends │
-│ ┌─────────────────────────────────────────────────────────────────────┐ │
-│ │ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ ┌──┐ │ │
-│ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ ─── Registrations │ │
-│ │ │ │ │ │ │ │ │ │ │ │ │ │ │ │ ─── Listings │ │
-│ │ └──┘ └──┘ └──┘ └──┘ └──┘ └──┘ └──┘ │ │
-│ │ Mon Tue Wed Thu Fri Sat Sun │ │
-│ └─────────────────────────────────────────────────────────────────────┘ │
-│ │
-│ Recent Users [View All Users] │
-│ ┌─────────────────────────────────────────────────────────────────────┐ │
-│ │ ID │ Name │ Email │ Role │ Registered │ │ │
-│ ├────┼───────────────┼────────────────────┼─────────┼────────────┼─────┤ │
-│ │ 1 │ John Doe │ john@email.com │ Agent │ 2026-05-01 │ │ │
-│ │ 2 │ Jane Smith │ jane@email.com │ User │ 2026-05-02 │ │ │
-│ │ 3 │ Bob Wilson │ bob@email.com │ Agent │ 2026-05-03 │ │ │
-│ └─────────────────────────────────────────────────────────────────────┘ │
-│ │
-│ Recent Listings [View All Listings] │
-│ ┌─────────────────────────────────────────────────────────────────────┐ │
-│ │ ID │ Title │ Agent │ Price │ Status │ Actions │ │
-│ ├────┼────────────────┼─────────────┼─────────┼────────┼──────────────┤ │
-│ │101 │ Modern Apt │ John Doe │ 
-850
-k
-│
-A
-c
-t
-i
-v
-e
-│
-[
-🗑
-®
-]
-││││
-102
-│
-F
-a
-m
-i
-l
-y
-H
-o
-m
-e
-│
-J
-a
-n
-e
-S
-m
-i
-t
-h
-│
-850k│Active│[🗑 
-R
-◯
- ]││││102│FamilyHome│JaneSmith│1.2M │ Active │ [🗑️] │ │
-│ └─────────────────────────────────────────────────────────────────────┘ │
-│ │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-text
+└── Admin (Authenticated + Admin Role)
+    ├── Admin Dashboard
+    ├── Product Management
+    │   ├── Product List
+    │   ├── Add Product
+    │   └── Edit Product
+    ├── Order Management
+    │   ├── Order List
+    │   └── Order Detail / Status Update
+    ├── User Management
+    │   └── User List
+    └── Settings
+```
 
 ---
 
-## 7. Key UI Components
+## User Flows
 
-### Property Card Component
-┌─────────────────────────┐
-│ │
-│ [Image] │
-│ │
-│ $850,000 │
-│ ───────────────────── │
-│ 123 Main Street │
-│ Surry Hills NSW 2010 │
-│ ───────────────────── │
-│ 🛏 3 🚽 2 🚗 2 │
-│ ───────────────────── │
-│ [View Details] │
-└─────────────────────────┘
+### Flow 1 — New User Registration & First Purchase
 
-text
+```
+[Landing Page]
+      │
+      ▼
+[Register Page] ──► Enter email + password + name
+      │
+      ▼
+[Email Verified] ──► (optional confirmation step)
+      │
+      ▼
+[Home / Product Listing]
+      │
+      ▼
+[Product Detail] ──► View details, read reviews
+      │
+      ▼
+[Add to Cart] ──► Cart updates in header
+      │
+      ▼
+[Cart Page] ──► Review items, adjust quantities
+      │
+      ▼
+[Checkout — Step 1: Shipping]
+      │
+      ▼
+[Checkout — Step 2: Payment]
+      │
+      ▼
+[Order Confirmation] ──► Email sent, order ID shown
+      │
+      ▼
+[My Orders] ──► Track order status
+```
 
-### Search Bar Component
-┌────────────────────────────────────────────────────────────────┐
-│ [🔍] Enter suburb, postcode or address... [Search] │
-└────────────────────────────────────────────────────────────────┘
+---
 
-text
+### Flow 2 — Returning Customer Re-order
 
-### Filter Panel Component (Desktop)
+```
+[Login Page] ──► Enter credentials
+      │
+      ▼
+[My Orders] ──► Find previous order
+      │
+      ▼
+[Order Detail] ──► Click "Re-order"
+      │
+      ▼
+[Cart] ──► Items pre-filled
+      │
+      ▼
+[Checkout] ──► Saved address pre-filled
+      │
+      ▼
+[Order Confirmation]
+```
+
+---
+
+### Flow 3 — Admin Publishes a New Product
+
+```
+[Admin Dashboard]
+      │
+      ▼
+[Product Management → Product List]
+      │
+      ▼
+[Add Product] ──► Fill name, price, category, description
+      │
+      ▼
+[Upload Images] ──► Drag & drop or file picker
+      │
+      ▼
+[Set Tags & Stock] ──► Add searchable tags, enter quantity
+      │
+      ▼
+[Preview] ──► See how product appears publicly
+      │
+      ▼
+[Publish] ──► is_published = true → live on site
+```
+
+---
+
+### Flow 4 — Order Status Update (Admin)
+
+```
+[Admin Dashboard] ──► Pending orders badge
+      │
+      ▼
+[Order List] ──► Filter by "pending"
+      │
+      ▼
+[Order Detail] ──► Review items + customer info
+      │
+      ▼
+[Update Status] ──► Select: confirmed → shipped → delivered
+      │
+      ▼
+[Confirmation Toast] ──► "Order #1234 marked as Shipped"
+      │
+      ▼
+[Customer notified] ──► Email / in-app notification sent
+```
+
+---
+
+## Main Screens & Wireframes
+
+> ASCII wireframes illustrate layout and hierarchy. Replace with Figma link for hi-fi designs.
+
+---
+
+### Screen 1 — Landing / Home Page
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ LOGO                          [Search ____]  [Login] [Cart🛒]│
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│              ┌────────────────────────────────┐             │
+│              │                                │             │
+│              │       HERO BANNER IMAGE        │             │
+│              │   "Find What You're Looking For"│             │
+│              │    [Shop Now]  [Browse Deals]  │             │
+│              │                                │             │
+│              └────────────────────────────────┘             │
+│                                                              │
+│  FEATURED CATEGORIES                                         │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
+│  │  [icon]  │  │  [icon]  │  │  [icon]  │  │  [icon]  │   │
+│  │Electronics│  │ Clothing │  │   Home   │  │  Sports  │   │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘   │
+│                                                              │
+│  TRENDING PRODUCTS                            [View All →]  │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
+│  │  [img]   │  │  [img]   │  │  [img]   │  │  [img]   │   │
+│  │ Product  │  │ Product  │  │ Product  │  │ Product  │   │
+│  │  $29.99  │  │  $49.99  │  │  $19.99  │  │  $89.99  │   │
+│  │[Add Cart]│  │[Add Cart]│  │[Add Cart]│  │[Add Cart]│   │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘   │
+│                                                              │
+│  [Footer: Links · Social · Copyright]                        │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Screen 2 — Product Listing Page
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ LOGO                          [Search ____]  [Login] [Cart🛒]│
+├──────────────────────────────────────────────────────────────┤
+│  Electronics (120 results)          Sort by: [Newest ▼]      │
+│  ┌─────────────────┬──────────────────────────────────────┐  │
+│  │  FILTERS        │  PRODUCT GRID                        │  │
+│  │                 │  ┌────────┐  ┌────────┐  ┌────────┐ │  │
+│  │  Category       │  │ [img]  │  │ [img]  │  │ [img]  │ │  │
+│  │  ○ Electronics  │  │ Name   │  │ Name   │  │ Name   │ │  │
+│  │  ○ Clothing     │  │ ★★★★☆ │  │ ★★★☆☆ │  │ ★★★★★ │ │  │
+│  │  ○ Home         │  │ $29.99 │  │ $49.99 │  │ $19.99 │ │  │
+│  │                 │  │[+ Cart]│  │[+ Cart]│  │[+ Cart]│ │  │
+│  │  Price Range    │  └────────┘  └────────┘  └────────┘ │  │
+│  │  $[___] – $[___]│                                      │  │
+│  │                 │  ┌────────┐  ┌────────┐  ┌────────┐ │  │
+│  │  Rating         │  │ [img]  │  │ [img]  │  │ [img]  │ │  │
+│  │  ☆☆☆☆☆ & up   │  │ Name   │  │ Name   │  │ Name   │ │  │
+│  │  ★☆☆☆☆ & up   │  │ ★★★★☆ │  │ ★★★☆☆ │  │ ★★★★★ │ │  │
+│  │  ★★☆☆☆ & up   │  │ $89.99 │  │ $14.99 │  │ $59.99 │ │  │
+│  │                 │  │[+ Cart]│  │[+ Cart]│  │[+ Cart]│ │  │
+│  │  Tags           │  └────────┘  └────────┘  └────────┘ │  │
+│  │  [ ] Sale       │                                      │  │
+│  │  [ ] Featured   │       ← 1  2  3  4  5 →             │  │
+│  │  [ ] New        │                                      │  │
+│  └─────────────────┴──────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Screen 3 — Product Detail Page
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ LOGO                          [Search ____]  [Login] [Cart🛒]│
+├──────────────────────────────────────────────────────────────┤
+│  Home > Electronics > Product Name                           │
+│                                                              │
+│  ┌─────────────────────┐   ┌──────────────────────────────┐  │
+│  │                     │   │  Product Name                │  │
+│  │   MAIN PRODUCT      │   │  ★★★★☆  (43 reviews)        │  │
+│  │      IMAGE          │   │                              │  │
+│  │                     │   │  $49.99                      │  │
+│  │                     │   │  ✅ In Stock (28 remaining)  │  │
+│  ├─────┬──────┬────────┤   │                              │  │
+│  │[img]│ [img]│  [img] │   │  Qty: [−] 1 [+]             │  │
+│  └─────┴──────┴────────┘   │                              │  │
+│                             │  [    Add to Cart    ]       │  │
+│                             │  [      Wishlist ♡   ]       │  │
+│                             │                              │  │
+│                             │  Category: Electronics       │  │
+│                             │  Tags: #sale #featured       │  │
+│                             └──────────────────────────────┘  │
+│                                                              │
+│  DESCRIPTION                                                 │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │  Full product description text goes here. Multiple     │  │
+│  │  paragraphs, bullet features, technical specifications. │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                                                              │
+│  CUSTOMER REVIEWS  ★★★★☆ 4.3 avg  (43 reviews)             │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │  ★★★★★  "Great product!" — Jamie, 2 days ago          │  │
+│  │  ★★★★☆  "Good value for money" — Alex, 1 week ago     │  │
+│  │  ★★★☆☆  "Decent but slow shipping" — Sam, 2 weeks ago │  │
+│  │                                    [Load more reviews] │  │
+│  └────────────────────────────────────────────────────────┘  │
+│  [Write a Review]                                            │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Screen 4 — Cart Page
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ LOGO                          [Search ____]  [Login] [Cart🛒]│
+├──────────────────────────────────────────────────────────────┤
+│  🛒 Your Cart (3 items)                                      │
+│  ┌──────────────────────────────────┬─────────────────────┐  │
+│  │  CART ITEMS                      │  ORDER SUMMARY      │  │
+│  │                                  │─────────────────────│  │
+│  │  ┌────┬──────────────┬──┬──────┐ │  Subtotal    $89.97 │  │
+│  │  │img │ Product A    │  │$29.99│ │  Shipping    $5.00  │  │
+│  │  │    │ Qty: [−] 2[+]│  │      │ │  Tax         $8.99  │  │
+│  │  │    │ [🗑 Remove]  │  │      │ │─────────────────────│  │
+│  │  └────┴──────────────┴──┴──────┘ │  Total      $103.96 │  │
+│  │                                  │                     │  │
+│  │  ┌────┬──────────────┬──┬──────┐ │  [  Proceed to      │  │
+│  │  │img │ Product B    │  │$49.99│ │     Checkout  ]     │  │
+│  │  │    │ Qty: [−] 1[+]│  │      │ │                     │  │
+│  │  │    │ [🗑 Remove]  │  │      │ │  [Continue Shopping]│  │
+│  │  └────┴──────────────┴──┴──────┘ │                     │  │
+│  │                                  │  🔒 Secure checkout  │  │
+│  │  Promo Code: [__________] [Apply]│  Visa 💳 Mastercard  │  │
+│  └──────────────────────────────────┴─────────────────────┘  │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Screen 5 — Checkout (3-Step)
+
+```
+Step Indicator:
+  [1 Shipping] ──── [2 Payment] ──── [3 Confirm]
+       ●                ○                ○
+
+┌──────────────────────────────────────────────────────────────┐
+│  STEP 1: Shipping Details                                    │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │  First Name [________________]                         │  │
+│  │  Last Name  [________________]                         │  │
+│  │  Address    [________________________________]          │  │
+│  │  City       [______________]  State [_______]          │  │
+│  │  Postcode   [________]  Country [Australia ▼]          │  │
+│  │  Phone      [________________]                         │  │
+│  │                                                        │  │
+│  │  Delivery Method                                       │  │
+│  │  ● Standard (3–5 days)  $5.00                         │  │
+│  │  ○ Express  (1–2 days)  $14.99                        │  │
+│  │                                                        │  │
+│  │                    [Continue to Payment →]             │  │
+│  └────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Screen 6 — Order Confirmation
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                                                              │
+│                    ✅                                        │
+│           Order Placed Successfully!                        │
+│                                                              │
+│           Order #ORD-2026-00847                             │
+│           Confirmation sent to jane@example.com             │
+│                                                              │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │  2× Product A                               $59.98     │  │
+│  │  1× Product B                               $49.99     │  │
+│  │  Shipping (Standard)                         $5.00     │  │
+│  │──────────────────────────────────────────────────────  │  │
+│  │  Total Charged                             $114.97     │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                                                              │
+│             [  Track My Order  ]                             │
+│             [  Continue Shopping  ]                          │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Screen 7 — Customer Order History
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ LOGO                          [Search ____]  [Jane ▼][Cart🛒]│
+├──────────────────────────────────────────────────────────────┤
+│  My Orders          Filter: [All Status ▼]  [Search orders] │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │  #ORD-2026-00847    30 May 2026    $114.97             │  │
+│  │  Status: ● Shipped                    [View Details →] │  │
+│  ├────────────────────────────────────────────────────────┤  │
+│  │  #ORD-2026-00721    18 May 2026     $29.99             │  │
+│  │  Status: ● Delivered                  [View Details →] │  │
+│  ├────────────────────────────────────────────────────────┤  │
+│  │  #ORD-2026-00610    05 May 2026     $49.99             │  │
+│  │  Status: ✗ Cancelled                  [View Details →] │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                          ← 1  2 →                            │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Screen 8 — Admin Dashboard
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ ≡  AdminPanel    Products  Orders  Users  Settings   Morgan ▼│
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Good morning, Morgan 👋  Here's today's snapshot.          │
+│                                                              │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
+│  │  $8,420  │  │    142   │  │    18    │  │    4     │   │
+│  │  Revenue │  │  Orders  │  │ Pending  │  │Low Stock │   │
+│  │  Today   │  │  Today   │  │  Orders  │  │ Items    │   │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘   │
+│                                                              │
+│  RECENT ORDERS                          [View All Orders →] │
+│  ┌───────────┬──────────────┬──────────┬─────────┬────────┐ │
+│  │ Order ID  │ Customer     │ Total    │ Status  │ Action │ │
+│  ├───────────┼──────────────┼──────────┼─────────┼────────┤ │
+│  │ #847      │ Jane Doe     │ $114.97  │ Shipped │ [View] │ │
+│  │ #846      │ Alex Smith   │  $29.99  │ Pending │ [View] │ │
+│  │ #845      │ Sam Lee      │  $79.00  │ Confirmed│[View] │ │
+│  └───────────┴──────────────┴──────────┴─────────┴────────┘ │
+│                                                              │
+│  SALES CHART (Last 7 Days)                                   │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │  $                                                     │  │
+│  │  10k │          ████                                   │  │
+│  │   8k │     ████ ████ ████                              │  │
+│  │   6k │████ ████ ████ ████ ████                         │  │
+│  │   4k │████ ████ ████ ████ ████ ████                    │  │
+│  │      └─────────────────────────────────                │  │
+│  │       Mon  Tue  Wed  Thu  Fri  Sat  Sun                │  │
+│  └────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Screen 9 — Admin Product Management
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ ≡  AdminPanel    Products  Orders  Users  Settings   Morgan ▼│
+├──────────────────────────────────────────────────────────────┤
+│  Products                                 [+ Add Product]    │
+│  [Search products ________]  Filter: [All Categories ▼]      │
+│  ┌──────┬────────────────┬──────┬───────┬───────────┬──────┐ │
+│  │ IMG  │ Name           │ Price│ Stock │ Status    │ Act  │ │
+│  ├──────┼────────────────┼──────┼───────┼───────────┼──────┤ │
+│  │ [▪]  │ Product Alpha  │$49.99│  85   │ ● Live    │✏️ 🗑│ │
+│  │ [▪]  │ Product Beta   │$29.99│   4   │ ⚠ Low Stock│✏️ 🗑│ │
+│  │ [▪]  │ Product Gamma  │$89.99│   0   │ ✗ Draft   │✏️ 🗑│ │
+│  │ [▪]  │ Product Delta  │$14.99│ 200   │ ● Live    │✏️ 🗑│ │
+│  └──────┴────────────────┴──────┴───────┴───────────┴──────┘ │
+│  Showing 1–4 of 24                     ← 1  2  3  4  5  6 → │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Screen 10 — Mobile Home (375px)
+
+```
 ┌─────────────────────┐
-│ FILTERS │
+│ ☰ LOGO        🔍 🛒 │
 ├─────────────────────┤
-│ Price Range │
-│ 
-0
-───────
-0───────1.5M │
-│ [ ] [ ]│
-├─────────────────────┤
-│ Bedrooms │
-│ ○ 1+ ○ 2+ ○ 3+ │
-├─────────────────────┤
-│ Property Type │
-│ □ House │
-│ □ Apartment │
-│ □ Townhouse │
-│ □ Land │
-├─────────────────────┤
-│ Suburb │
-│ [Select suburb ▼] │
-├─────────────────────┤
-│ [Apply Filters] │
-│ [Clear All] │
+│ ┌─────────────────┐ │
+│ │  HERO BANNER    │ │
+│ │  Shop Now       │ │
+│ │  [Shop Now]     │ │
+│ └─────────────────┘ │
+│                     │
+│ CATEGORIES          │
+│ ┌────┐ ┌────┐       │
+│ │icon│ │icon│  →    │
+│ │Elec│ │Clth│       │
+│ └────┘ └────┘       │
+│                     │
+│ TRENDING            │
+│ ┌──────────┐        │
+│ │  [img]   │        │
+│ │ Product  │        │
+│ │  $29.99  │        │
+│ │[Add Cart]│        │
+│ └──────────┘        │
+│ ┌──────────┐        │
+│ │  [img]   │        │
+│ │ Product  │        │
+│ │  $49.99  │        │
+│ │[Add Cart]│        │
+│ └──────────┘        │
+│                     │
+│ 🏠  🔍  🛒  👤     │
 └─────────────────────┘
-
-text
-
-### Mobile Bottom Navigation
-┌─────────────────────────────────────────────────────────────────┐
-│ │
-│ [🏠] [🔍] [❤️] [👤] │
-│ Home Search Favourites Profile │
-│ │
-└─────────────────────────────────────────────────────────────────┘
-
-text
+```
 
 ---
 
-## 8. Design Deliverables Checklist
+## UI Component Library
 
-- [x] User flows defined (4 flows)
-- [x] Main screens identified (8 screens)
-- [x] Wireframes created (text-based descriptions)
-- [x] Navigation structure defined
-- [x] Responsive breakpoints established
-- [x] Colour palette defined
-- [x] Typography system defined
-- [x] Spacing scale defined
-- [x] UI components designed
-- [x] Mobile and desktop layouts considered
+### Buttons
 
----
-
-## 9. Tools Used
-
-| Tool | Purpose |
-|------|---------|
-| Figma | High-fidelity mockups and prototypes |
-| Miro | User flow diagrams |
-| Coolors | Colour palette generation |
-| Google Fonts | Typography (Inter font) |
+| Variant     | Usage                              | Style                               |
+|-------------|------------------------------------|-------------------------------------|
+| Primary     | Main CTA (Add to Cart, Checkout)   | Filled, brand colour, rounded       |
+| Secondary   | Cancel, go back actions            | Outlined, transparent fill          |
+| Destructive | Delete, cancel order               | Red fill or red border              |
+| Ghost       | Low-emphasis actions               | No border, text only                |
+| Icon        | Cart, wishlist, delete row         | Icon only, square, accessible label |
 
 ---
 
-## Next Step
+### Form Inputs
 
-Proceed to **Weeks 6-7 – Backend Development** to implement the database and APIs, then **Weeks 8-9 – Frontend Development** to build the UI components.
+| Component      | States                                    |
+|----------------|-------------------------------------------|
+| Text Input     | Default · Focus · Error · Disabled        |
+| Select/Dropdown| Default · Open · Selected · Disabled      |
+| Checkbox       | Unchecked · Checked · Indeterminate       |
+| Radio Button   | Unselected · Selected · Disabled          |
+| Textarea       | Default · Focus · Character count         |
+| File Upload    | Idle · Drag-over · Uploading · Uploaded   |
 
---- 
+---
+
+### Feedback Components
+
+| Component       | Trigger                                    |
+|-----------------|--------------------------------------------|
+| Toast / Snackbar| Success actions, error alerts (auto-dismiss)|
+| Inline Error    | Form validation failures (below field)     |
+| Empty State     | No results, no orders, no reviews          |
+| Loading Spinner | API calls, page loads                      |
+| Skeleton Screen | Content loading placeholder                |
+| Progress Bar    | Checkout steps, file upload progress       |
+
+---
+
+### Data Display
+
+| Component       | Used On                                    |
+|-----------------|--------------------------------------------|
+| Product Card    | Listing page, search results, home feed    |
+| Order Row       | Order history, admin order list            |
+| Review Card     | Product detail page                        |
+| Stats Card      | Admin dashboard metrics                    |
+| Data Table      | Admin product/order/user lists             |
+| Badge / Pill    | Order status, stock status, tags           |
+| Star Rating     | Product cards, review list                 |
+| Pagination      | All list views                             |
+
+---
+
+### Navigation
+
+| Component       | Used On                                    |
+|-----------------|--------------------------------------------|
+| Top Navigation  | All pages (desktop)                        |
+| Bottom Tab Bar  | All pages (mobile)                         |
+| Sidebar         | Admin panel                                |
+| Breadcrumbs     | Product detail, order detail               |
+| Dropdown Menu   | User profile menu                          |
+| Mobile Drawer   | Category filters, mobile nav               |
+
+---
+
+## Navigation Structure
+
+### Desktop Navigation (Top Bar)
+
+```
+[Logo]   [Home]  [Products]  [Categories ▼]  [Search ________]  [Login / User ▼]  [Cart 🛒 3]
+```
+
+### Mobile Navigation (Bottom Tab Bar)
+
+```
+[🏠 Home]   [🔍 Search]   [🛒 Cart]   [📦 Orders]   [👤 Profile]
+```
+
+### Admin Sidebar
+
+```
+┌──────────────┐
+│  AdminPanel  │
+├──────────────┤
+│ 📊 Dashboard │
+│ 📦 Products  │
+│ 🛒 Orders    │
+│ 👤 Users     │
+│ ⚙️  Settings  │
+├──────────────┤
+│  Morgan ▼    │
+│  [Logout]    │
+└──────────────┘
+```
+
+---
+
+## Responsive Breakpoints
+
+| Breakpoint | Width       | Layout Description                                    |
+|------------|-------------|-------------------------------------------------------|
+| **xs**     | < 480px     | Single column · Bottom nav · Stacked cards             |
+| **sm**     | 480–767px   | Single column · 2-col product grid                    |
+| **md**     | 768–1023px  | Two column · Top nav · Sidebar filters collapsible    |
+| **lg**     | 1024–1279px | Three column product grid · Persistent sidebar         |
+| **xl**     | ≥ 1280px    | Four column product grid · Full admin dashboard        |
+
+---
+
+## Accessibility Standards
+
+> Target: **WCAG 2.1 Level AA**
+
+| Requirement          | Implementation                                               |
+|----------------------|--------------------------------------------------------------|
+| **Colour Contrast**  | Minimum 4.5:1 ratio for normal text, 3:1 for large text      |
+| **Keyboard Nav**     | All interactive elements reachable and operable via keyboard  |
+| **Focus Indicators** | Visible focus ring on all focusable elements                  |
+| **Screen Readers**   | Semantic HTML, ARIA labels, alt text on all images            |
+| **Form Labels**      | Every input has an associated `<label>` element               |
+| **Error Messages**   | Errors are linked to their field via `aria-describedby`       |
+| **Touch Targets**    | Minimum 44×44px tap target on mobile                          |
+| **Skip Links**       | "Skip to main content" link at top of every page              |
+| **Motion**           | Animations respect `prefers-reduced-motion` media query       |
+
+---
+
+## Design Tokens
+
+```css
+/* ── Colours ──────────────────────────────────────────── */
+--color-primary:        #2563EB;   /* Blue 600 — buttons, links   */
+--color-primary-hover:  #1D4ED8;   /* Blue 700 — hover state      */
+--color-success:        #16A34A;   /* Green 600 — confirmed, live */
+--color-warning:        #D97706;   /* Amber 600 — low stock       */
+--color-danger:         #DC2626;   /* Red 600 — errors, delete    */
+--color-neutral-50:     #F9FAFB;   /* Backgrounds                 */
+--color-neutral-100:    #F3F4F6;   /* Card backgrounds            */
+--color-neutral-700:    #374151;   /* Body text                   */
+--color-neutral-900:    #111827;   /* Headings                    */
+
+/* ── Typography ───────────────────────────────────────── */
+--font-sans:     'Inter', system-ui, sans-serif;
+--text-xs:       0.75rem;    /* 12px */
+--text-sm:       0.875rem;   /* 14px */
+--text-base:     1rem;       /* 16px */
+--text-lg:       1.125rem;   /* 18px */
+--text-xl:       1.25rem;    /* 20px */
+--text-2xl:      1.5rem;     /* 24px */
+--text-3xl:      1.875rem;   /* 30px */
+
+/* ── Spacing ──────────────────────────────────────────── */
+--space-1:  0.25rem;   /* 4px  */
+--space-2:  0.5rem;    /* 8px  */
+--space-3:  0.75rem;   /* 12px */
+--space-4:  1rem;      /* 16px */
+--space-6:  1.5rem;    /* 24px */
+--space-8:  2rem;      /* 32px */
+--space-12: 3rem;      /* 48px */
+--space-16: 4rem;      /* 64px */
+
+/* ── Radius ───────────────────────────────────────────── */
+--radius-sm:   0.25rem;   /* Tags, badges     */
+--radius-md:   0.5rem;    /* Inputs, cards    */
+--radius-lg:   0.75rem;   /* Modals, panels   */
+--radius-full: 9999px;    /* Pills, avatars   */
+
+/* ── Shadows ──────────────────────────────────────────── */
+--shadow-sm:  0 1px 2px rgba(0,0,0,0.05);
+--shadow-md:  0 4px 6px rgba(0,0,0,0.07);
+--shadow-lg:  0 10px 15px rgba(0,0,0,0.1);
+```
+
+---
+
+## Tooling & Assets
+
+| Tool / Resource       | Purpose                                             |
+|-----------------------|-----------------------------------------------------|
+| **Figma**             | Hi-fi designs, prototyping, component library       |
+| **Figma Tokens**      | Sync design tokens to code                          |
+| **Storybook**         | Component documentation and visual testing          |
+| **Unsplash / Pexels** | Placeholder images for wireframes                   |
+| **Heroicons**         | Open-source SVG icon set                            |
+| **Lottie**            | Micro-animations (empty states, success screens)    |
+| **Contrast Checker**  | https://webaim.org/resources/contrastchecker        |
+| **WAVE**              | Accessibility audit tool                            |
+| **Lighthouse**        | Performance, accessibility, and SEO audit           |
+
+### Figma File Structure
+
+```
+📁 UI/UX Project
+ ├── 📄 Cover & Index
+ ├── 📄 Design Tokens
+ ├── 📄 Component Library
+ │    ├── Buttons
+ │    ├── Inputs
+ │    ├── Cards
+ │    ├── Navigation
+ │    └── Feedback
+ ├── 📄 Wireframes (Lo-Fi)
+ ├── 📄 Screen Designs (Hi-Fi)
+ │    ├── Public Screens
+ │    ├── Customer Screens
+ │    └── Admin Screens
+ ├── 📄 User Flows
+ └── 📄 Prototype Links
+```
+
+---
+
+*Week 6 Deliverable · Last updated: May 2026 · Maintained by the design team*
+
