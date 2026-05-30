@@ -1,553 +1,768 @@
-# Week 5 – Database & API Design
 
-## What is this week about?
-
-Designing the **data model** (database schema) and **API endpoints** that will power the Aussie Realestate Website.
+> **Deliverable:** Database Schema and API Specification  
+> **Activities:** Define database schema · Define REST APIs · Define validation rules
 
 ---
 
-## Key Questions Answered
+## Table of Contents
 
-| Question | Answer |
-|----------|--------|
-| **What entities exist?** | Users, Listings, Listing Images, Saved Listings (Favourites), Listing Views (Analytics) |
-| **What relationships exist?** | One-to-many (User to Listings, Listing to Images), Many-to-many (User to Favourites) |
-| **What APIs are required?** | Auth APIs, Listing CRUD APIs, Search/Filter API, Dashboard APIs |
-
----
-
-## Activities Done
-
-| Activity | What We Did |
-|----------|-------------|
-| Define database schema | Created 5 tables with columns, data types, keys, and constraints |
-| Define relationships | Mapped foreign keys and cardinality (1:N, M:N) |
-| Define REST APIs | Designed 16 endpoints with methods, paths, request/response formats |
-| Define validation | Set validation rules for all inputs (email, password, price, etc.) |
+- [Overview](#overview)
+- [Entities & Relationships](#entities--relationships)
+- [Database Schema](#database-schema)
+- [Entity Relationship Diagram](#entity-relationship-diagram)
+- [REST API Specification](#rest-api-specification)
+- [Validation Rules](#validation-rules)
+- [Error Handling](#error-handling)
+- [Glossary](#glossary)
 
 ---
 
-## 1. Database Schema Design
+## Overview
 
-### Entity Relationship Diagram (ERD)
+| Item                | Details                                      |
+|---------------------|----------------------------------------------|
+| **Database**        | PostgreSQL 16                                |
+| **ORM**             | Prisma / TypeORM / Sequelize                 |
+| **API Style**       | REST over HTTPS                              |
+| **Auth**            | JWT Bearer Token                             |
+| **Base URL**        | `https://api.yourdomain.com/v1`              |
+| **Data Format**     | JSON (`Content-Type: application/json`)      |
+| **API Version**     | v1                                           |
 
-```mermaid
-erDiagram
-    users {
-        SERIAL id PK
-        VARCHAR email UK
-        VARCHAR password_hash
-        VARCHAR full_name
-        VARCHAR role
-        VARCHAR phone
-        TEXT profile_picture
-        TIMESTAMP created_at
-        TIMESTAMP updated_at
-    }
+---
 
-    listings {
-        SERIAL id PK
-        INT agent_id FK
-        VARCHAR title
-        TEXT description
-        DECIMAL price
-        VARCHAR address
-        VARCHAR suburb
-        VARCHAR postcode
-        DECIMAL lat
-        DECIMAL lng
-        INT bedrooms
-        DECIMAL bathrooms
-        INT car_spaces
-        VARCHAR property_type
-        VARCHAR status
-        INT view_count
-        TIMESTAMP created_at
-        TIMESTAMP updated_at
-    }
+## Entities & Relationships
 
-    listing_images {
-        SERIAL id PK
-        INT listing_id FK
-        VARCHAR image_url
-        INT display_order
-        TIMESTAMP created_at
-    }
+### What Entities Exist?
 
-    saved_listings {
-        SERIAL id PK
-        INT user_id FK
-        INT listing_id FK
-        TIMESTAMP saved_at
-    }
+| Entity       | Description                                           |
+|--------------|-------------------------------------------------------|
+| `User`       | Registered application user (customer or admin)       |
+| `Profile`    | Extended user details (one-to-one with User)          |
+| `Product`    | Item available for purchase or interaction            |
+| `Category`   | Grouping label for products                           |
+| `Order`      | A purchase transaction placed by a user               |
+| `OrderItem`  | Individual line item within an order                  |
+| `Review`     | User-submitted rating and comment on a product        |
+| `Tag`        | Searchable keyword associated with products           |
 
-    listing_views {
-        SERIAL id PK
-        INT listing_id FK
-        VARCHAR viewer_ip_hash
-        TIMESTAMP viewed_at
-    }
+> Replace or extend these entities to match your actual domain.
 
-    users ||--o{ listings : "has many (as agent)"
-    listings ||--o{ listing_images : "has many"
-    users ||--o{ saved_listings : "saves"
-    listings ||--o{ saved_listings : "saved by"
-    listings ||--o{ listing_views : "has many views"
+---
 
-Table Details
-Table 1: users
-Column	Type	Constraints	Description
-id	SERIAL	PRIMARY KEY	Unique user ID
-email	VARCHAR(255)	UNIQUE, NOT NULL	User email address
-password_hash	VARCHAR(255)	NOT NULL	Bcrypt hashed password
-full_name	VARCHAR(100)	NOT NULL	User's full name
-role	VARCHAR(20)	DEFAULT 'guest'	guest / agent / admin
-phone	VARCHAR(20)	NULL	Contact number
-profile_picture	TEXT	NULL	Profile image URL
-created_at	TIMESTAMP	DEFAULT NOW()	Account creation time
-updated_at	TIMESTAMP	NULL	Last update time
-Table 2: listings
-Column	Type	Constraints	Description
-id	SERIAL	PRIMARY KEY	Unique listing ID
-agent_id	INT	FOREIGN KEY (users.id), NOT NULL	Agent who created listing
-title	VARCHAR(255)	NOT NULL	Property title
-description	TEXT	NULL	Detailed description
-price	DECIMAL(12,2)	NOT NULL	Property price
-address	VARCHAR(500)	NOT NULL	Full street address
-suburb	VARCHAR(100)	NOT NULL	Suburb name
-postcode	VARCHAR(10)	NOT NULL	Postcode
-lat	DECIMAL(10,8)	NULL	Latitude for map
-lng	DECIMAL(11,8)	NULL	Longitude for map
-bedrooms	INT	DEFAULT 0	Number of bedrooms
-bathrooms	DECIMAL(3,1)	DEFAULT 0	Number of bathrooms
-car_spaces	INT	DEFAULT 0	Number of car spaces
-property_type	VARCHAR(20)	NOT NULL	house / apartment / townhouse / land
-status	VARCHAR(20)	DEFAULT 'active'	active / sold / rented
-view_count	INT	DEFAULT 0	Total number of views
-created_at	TIMESTAMP	DEFAULT NOW()	Listing creation time
-updated_at	TIMESTAMP	NULL	Last update time
-Table 3: listing_images
-Column	Type	Constraints	Description
-id	SERIAL	PRIMARY KEY	Unique image ID
-listing_id	INT	FOREIGN KEY (listings.id), NOT NULL	Associated listing
-image_url	VARCHAR(1000)	NOT NULL	Cloud storage URL
-display_order	INT	DEFAULT 0	Order of image display
-created_at	TIMESTAMP	DEFAULT NOW()	Upload time
-Table 4: saved_listings (Favourites)
-Column	Type	Constraints	Description
-id	SERIAL	PRIMARY KEY	Unique favourite ID
-user_id	INT	FOREIGN KEY (users.id), NOT NULL	User saving the listing
-listing_id	INT	FOREIGN KEY (listings.id), NOT NULL	Listing being saved
-saved_at	TIMESTAMP	DEFAULT NOW()	Time saved
-Table 5: listing_views (Analytics)
-Column	Type	Constraints	Description
-id	SERIAL	PRIMARY KEY	Unique view ID
-listing_id	INT	FOREIGN KEY (listings.id), NOT NULL	Viewed listing
-viewer_ip_hash	VARCHAR(64)	NOT NULL	Anonymized IP address
-viewed_at	TIMESTAMP	DEFAULT NOW()	View timestamp
-Indexes for Performance
-sql
--- Users
+### What Relationships Exist?
+
+```
+User ──────────── Profile          (One-to-One)
+User ──────────── Order            (One-to-Many)
+User ──────────── Review           (One-to-Many)
+Order ─────────── OrderItem        (One-to-Many)
+Product ──────── OrderItem         (One-to-Many)
+Product ──────── Review            (One-to-Many)
+Product ──────── Category          (Many-to-One)
+Product ──────── Tag               (Many-to-Many)
+```
+
+---
+
+## Database Schema
+
+### `users`
+
+```sql
+CREATE TABLE users (
+  id            UUID          PRIMARY KEY DEFAULT gen_random_uuid(),
+  email         VARCHAR(255)  NOT NULL UNIQUE,
+  password_hash VARCHAR(255)  NOT NULL,
+  role          VARCHAR(20)   NOT NULL DEFAULT 'customer'
+                              CHECK (role IN ('customer', 'admin')),
+  is_active     BOOLEAN       NOT NULL DEFAULT TRUE,
+  created_at    TIMESTAMPTZ   NOT NULL DEFAULT NOW(),
+  updated_at    TIMESTAMPTZ   NOT NULL DEFAULT NOW()
+);
+
 CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_users_role ON users(role);
+```
 
--- Listings
-CREATE INDEX idx_listings_agent_id ON listings(agent_id);
-CREATE INDEX idx_listings_status ON listings(status);
-CREATE INDEX idx_listings_price ON listings(price);
-CREATE INDEX idx_listings_suburb ON listings(suburb);
-CREATE INDEX idx_listings_postcode ON listings(postcode);
-CREATE INDEX idx_listings_property_type ON listings(property_type);
-CREATE INDEX idx_listings_bedrooms ON listings(bedrooms);
-CREATE INDEX idx_listings_created_at ON listings(created_at);
+---
 
--- Listing Images
-CREATE INDEX idx_listing_images_listing_id ON listing_images(listing_id);
+### `profiles`
 
--- Saved Listings
-CREATE INDEX idx_saved_listings_user_id ON saved_listings(user_id);
-CREATE INDEX idx_saved_listings_listing_id ON saved_listings(listing_id);
+```sql
+CREATE TABLE profiles (
+  id           UUID          PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id      UUID          NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+  first_name   VARCHAR(100),
+  last_name    VARCHAR(100),
+  phone        VARCHAR(20),
+  avatar_url   TEXT,
+  bio          TEXT,
+  created_at   TIMESTAMPTZ   NOT NULL DEFAULT NOW(),
+  updated_at   TIMESTAMPTZ   NOT NULL DEFAULT NOW()
+);
+```
 
--- Listing Views
-CREATE INDEX idx_listing_views_listing_id ON listing_views(listing_id);
-CREATE INDEX idx_listing_views_viewed_at ON listing_views(viewed_at);
-2. API Design
-API Base URL
-text
-https://api.aussierealestate.com/v1
-Authentication
-All protected endpoints require a JWT token sent as an HTTP-only cookie.
+---
 
-API Endpoints Summary
-Method	Endpoint	Description	Auth
-POST	/auth/register	Register new user	None
-POST	/auth/login	Login and get JWT	None
-POST	/auth/logout	Logout and clear cookie	Required
-GET	/auth/me	Get current user profile	Required
-PUT	/auth/me	Update user profile	Required
-GET	/listings	Search and filter listings	None
-GET	/listings/:id	Get single listing details	None
-POST	/listings	Create new listing	Agent
-PUT	/listings/:id	Update listing	Agent/Admin
-DELETE	/listings/:id	Delete listing	Agent/Admin
-POST	/listings/:id/images	Upload image to listing	Agent
-DELETE	/listings/:id/images/:imageId	Delete listing image	Agent
-GET	/favourites	Get user's saved listings	Required
-POST	/favourites/:listingId	Save listing to favourites	Required
-DELETE	/favourites/:listingId	Remove from favourites	Required
-GET	/dashboard/agent	Agent dashboard stats	Agent
-GET	/dashboard/admin	Admin dashboard stats	Admin
-Detailed API Specifications
-1. Register User
-http
-POST /auth/register
-Request Body:
+### `categories`
 
-json
+```sql
+CREATE TABLE categories (
+  id          UUID          PRIMARY KEY DEFAULT gen_random_uuid(),
+  name        VARCHAR(100)  NOT NULL UNIQUE,
+  slug        VARCHAR(120)  NOT NULL UNIQUE,
+  description TEXT,
+  created_at  TIMESTAMPTZ   NOT NULL DEFAULT NOW()
+);
+```
+
+---
+
+### `products`
+
+```sql
+CREATE TABLE products (
+  id            UUID           PRIMARY KEY DEFAULT gen_random_uuid(),
+  category_id   UUID           REFERENCES categories(id) ON DELETE SET NULL,
+  name          VARCHAR(255)   NOT NULL,
+  slug          VARCHAR(280)   NOT NULL UNIQUE,
+  description   TEXT,
+  price         NUMERIC(10,2)  NOT NULL CHECK (price >= 0),
+  stock         INTEGER        NOT NULL DEFAULT 0 CHECK (stock >= 0),
+  is_published  BOOLEAN        NOT NULL DEFAULT FALSE,
+  created_at    TIMESTAMPTZ    NOT NULL DEFAULT NOW(),
+  updated_at    TIMESTAMPTZ    NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_products_category ON products(category_id);
+CREATE INDEX idx_products_slug     ON products(slug);
+```
+
+---
+
+### `tags`
+
+```sql
+CREATE TABLE tags (
+  id    UUID         PRIMARY KEY DEFAULT gen_random_uuid(),
+  name  VARCHAR(50)  NOT NULL UNIQUE
+);
+```
+
+---
+
+### `product_tags` *(join table)*
+
+```sql
+CREATE TABLE product_tags (
+  product_id  UUID  NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+  tag_id      UUID  NOT NULL REFERENCES tags(id)     ON DELETE CASCADE,
+  PRIMARY KEY (product_id, tag_id)
+);
+```
+
+---
+
+### `orders`
+
+```sql
+CREATE TABLE orders (
+  id            UUID           PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id       UUID           NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
+  status        VARCHAR(30)    NOT NULL DEFAULT 'pending'
+                               CHECK (status IN ('pending','confirmed','shipped','delivered','cancelled')),
+  total_amount  NUMERIC(12,2)  NOT NULL CHECK (total_amount >= 0),
+  notes         TEXT,
+  created_at    TIMESTAMPTZ    NOT NULL DEFAULT NOW(),
+  updated_at    TIMESTAMPTZ    NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_orders_user   ON orders(user_id);
+CREATE INDEX idx_orders_status ON orders(status);
+```
+
+---
+
+### `order_items`
+
+```sql
+CREATE TABLE order_items (
+  id          UUID           PRIMARY KEY DEFAULT gen_random_uuid(),
+  order_id    UUID           NOT NULL REFERENCES orders(id)   ON DELETE CASCADE,
+  product_id  UUID           NOT NULL REFERENCES products(id) ON DELETE RESTRICT,
+  quantity    INTEGER        NOT NULL CHECK (quantity > 0),
+  unit_price  NUMERIC(10,2)  NOT NULL CHECK (unit_price >= 0),
+  subtotal    NUMERIC(12,2)  GENERATED ALWAYS AS (quantity * unit_price) STORED
+);
+
+CREATE INDEX idx_order_items_order   ON order_items(order_id);
+CREATE INDEX idx_order_items_product ON order_items(product_id);
+```
+
+---
+
+### `reviews`
+
+```sql
+CREATE TABLE reviews (
+  id          UUID         PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id     UUID         NOT NULL REFERENCES users(id)    ON DELETE CASCADE,
+  product_id  UUID         NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+  rating      SMALLINT     NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  title       VARCHAR(150),
+  body        TEXT,
+  created_at  TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+  UNIQUE (user_id, product_id)   -- one review per user per product
+);
+
+CREATE INDEX idx_reviews_product ON reviews(product_id);
+```
+
+---
+
+## Entity Relationship Diagram
+
+```
+┌──────────┐         ┌──────────┐
+│   User   │ 1─────1 │ Profile  │
+│──────────│         │──────────│
+│ id (PK)  │         │ id (PK)  │
+│ email    │         │ user_id  │
+│ role     │         │ name     │
+└──┬───────┘         └──────────┘
+   │ 1
+   │
+   ├──────────────────────────────────────────────┐
+   │ 1..N                                         │ 1..N
+   ▼                                              ▼
+┌──────────┐   1..N  ┌─────────────┐     ┌──────────────┐
+│  Order   │─────────│  OrderItem  │     │   Review     │
+│──────────│         │─────────────│     │──────────────│
+│ id (PK)  │         │ id (PK)     │     │ id (PK)      │
+│ user_id  │         │ order_id    │     │ user_id      │
+│ status   │         │ product_id  │     │ product_id   │
+│ total    │         │ quantity    │     │ rating 1–5   │
+└──────────┘         │ unit_price  │     └──────┬───────┘
+                     └──────┬──────┘            │ N
+                            │ N                 │
+                            │              ┌────┴─────┐    N..N  ┌──────────┐
+                            └──────────────│  Product │──────────│   Tag    │
+                                           │──────────│          │──────────│
+                                           │ id (PK)  │          │ id (PK)  │
+                                           │ name     │          │ name     │
+                                           │ price    │          └──────────┘
+                                           │ stock    │
+                                           │ cat_id   │──── N:1 ──── Category
+                                           └──────────┘
+```
+
+---
+
+## REST API Specification
+
+> **Base URL:** `https://api.yourdomain.com/v1`  
+> **Auth Header:** `Authorization: Bearer <token>`
+
+---
+
+### Auth Endpoints
+
+#### `POST /auth/register`
+
+Register a new user account.
+
+**Request Body**
+
+```json
 {
-    "email": "john@example.com",
-    "password": "SecurePass123",
-    "full_name": "John Doe",
-    "role": "agent"
+  "email": "user@example.com",
+  "password": "S3cur3P@ss!",
+  "first_name": "Jane",
+  "last_name": "Doe"
 }
-Validation Rules:
+```
 
-Field	Rule
-email	Required, valid email format, max 255 chars
-password	Required, min 8 chars, at least 1 number
-full_name	Required, min 2 chars, max 100 chars
-role	Optional, must be 'guest', 'agent', or 'admin'
-Response (201 Created):
+**Response `201 Created`**
 
-json
+```json
 {
-    "success": true,
-    "message": "User registered successfully",
-    "user": {
-        "id": 1,
-        "email": "john@example.com",
-        "full_name": "John Doe",
-        "role": "agent",
-        "created_at": "2026-05-16T10:00:00Z"
+  "id": "uuid",
+  "email": "user@example.com",
+  "role": "customer",
+  "created_at": "2026-05-30T10:00:00Z"
+}
+```
+
+---
+
+#### `POST /auth/login`
+
+Authenticate and receive a JWT token.
+
+**Request Body**
+
+```json
+{
+  "email": "user@example.com",
+  "password": "S3cur3P@ss!"
+}
+```
+
+**Response `200 OK`**
+
+```json
+{
+  "access_token": "eyJhbGci...",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}
+```
+
+---
+
+#### `POST /auth/logout`
+
+Invalidate the current session token.
+
+**Auth required:** Yes  
+**Response:** `204 No Content`
+
+---
+
+### User Endpoints
+
+#### `GET /users/me`
+
+Retrieve the authenticated user's profile.
+
+**Auth required:** Yes  
+**Response `200 OK`**
+
+```json
+{
+  "id": "uuid",
+  "email": "user@example.com",
+  "role": "customer",
+  "profile": {
+    "first_name": "Jane",
+    "last_name": "Doe",
+    "phone": "+61400000000",
+    "avatar_url": "https://cdn.example.com/avatars/uuid.jpg"
+  }
+}
+```
+
+---
+
+#### `PATCH /users/me`
+
+Update the authenticated user's profile.
+
+**Auth required:** Yes
+
+**Request Body** *(all fields optional)*
+
+```json
+{
+  "first_name": "Jane",
+  "last_name": "Smith",
+  "phone": "+61400000001",
+  "bio": "Updated bio text."
+}
+```
+
+**Response `200 OK`** — returns updated profile object.
+
+---
+
+### Product Endpoints
+
+#### `GET /products`
+
+List all published products with pagination and filtering.
+
+**Auth required:** No
+
+**Query Parameters**
+
+| Parameter    | Type    | Description                          | Default |
+|--------------|---------|--------------------------------------|---------|
+| `page`       | integer | Page number                          | `1`     |
+| `limit`      | integer | Items per page (max 100)             | `20`    |
+| `category`   | string  | Filter by category slug              | —       |
+| `tag`        | string  | Filter by tag name                   | —       |
+| `min_price`  | number  | Minimum price filter                 | —       |
+| `max_price`  | number  | Maximum price filter                 | —       |
+| `sort`       | string  | `price_asc`, `price_desc`, `newest`  | `newest`|
+| `search`     | string  | Full-text search on name/description | —       |
+
+**Response `200 OK`**
+
+```json
+{
+  "data": [
+    {
+      "id": "uuid",
+      "name": "Product Name",
+      "slug": "product-name",
+      "price": 29.99,
+      "stock": 50,
+      "category": { "id": "uuid", "name": "Electronics" },
+      "tags": ["sale", "featured"],
+      "average_rating": 4.3,
+      "review_count": 12
     }
+  ],
+  "meta": {
+    "total": 120,
+    "page": 1,
+    "limit": 20,
+    "total_pages": 6
+  }
 }
-2. Login
-http
-POST /auth/login
-Request Body:
+```
 
-json
+---
+
+#### `GET /products/:id`
+
+Retrieve a single product by ID.
+
+**Auth required:** No  
+**Response `200 OK`** — full product object including reviews summary.
+
+---
+
+#### `POST /products` *(Admin only)*
+
+Create a new product.
+
+**Auth required:** Yes (role: `admin`)
+
+**Request Body**
+
+```json
 {
-    "email": "john@example.com",
-    "password": "SecurePass123"
+  "name": "New Product",
+  "description": "Product description.",
+  "price": 49.99,
+  "stock": 100,
+  "category_id": "uuid",
+  "tags": ["new", "featured"],
+  "is_published": false
 }
-Response (200 OK):
+```
 
-json
+**Response `201 Created`** — full product object.
+
+---
+
+#### `PATCH /products/:id` *(Admin only)*
+
+Partially update a product.
+
+**Auth required:** Yes (role: `admin`)  
+**Request Body** — any subset of product fields.  
+**Response `200 OK`** — updated product object.
+
+---
+
+#### `DELETE /products/:id` *(Admin only)*
+
+Soft-delete a product (sets `is_published = false`).
+
+**Auth required:** Yes (role: `admin`)  
+**Response:** `204 No Content`
+
+---
+
+### Order Endpoints
+
+#### `GET /orders`
+
+List orders for the authenticated user.
+
+**Auth required:** Yes
+
+**Query Parameters**
+
+| Parameter | Type    | Description                                              | Default |
+|-----------|---------|----------------------------------------------------------|---------|
+| `status`  | string  | Filter by status (`pending`, `confirmed`, etc.)          | —       |
+| `page`    | integer | Page number                                              | `1`     |
+| `limit`   | integer | Items per page                                           | `10`    |
+
+**Response `200 OK`**
+
+```json
 {
-    "success": true,
-    "message": "Login successful",
-    "user": {
-        "id": 1,
-        "email": "john@example.com",
-        "full_name": "John Doe",
-        "role": "agent"
+  "data": [
+    {
+      "id": "uuid",
+      "status": "confirmed",
+      "total_amount": 89.97,
+      "item_count": 3,
+      "created_at": "2026-05-30T09:00:00Z"
     }
+  ],
+  "meta": { "total": 5, "page": 1, "limit": 10, "total_pages": 1 }
 }
-Cookie Set: token=<JWT>; HttpOnly; Secure; SameSite=Strict; Max-Age=86400
+```
 
-3. Search Listings
-http
-GET /listings?keyword=Surry&minPrice=500000&maxPrice=1000000&bedrooms=2&propertyType=apartment&sortBy=price&sortOrder=asc&page=1&limit=12
-Query Parameters:
+---
 
-Parameter	Type	Required	Description
-keyword	string	No	Search in title, suburb, postcode
-minPrice	decimal	No	Minimum price
-maxPrice	decimal	No	Maximum price
-suburb	string	No	Suburb name
-bedrooms	int	No	Minimum bedrooms
-propertyType	string	No	house / apartment / townhouse / land
-sortBy	string	No	price / created_at
-sortOrder	string	No	asc / desc
-page	int	No	Page number (default 1)
-limit	int	No	Items per page (default 12, max 50)
-Response (200 OK):
+#### `GET /orders/:id`
 
-json
+Retrieve a single order with all line items.
+
+**Auth required:** Yes (owner or admin)
+
+**Response `200 OK`**
+
+```json
 {
-    "success": true,
-    "data": {
-        "listings": [
-            {
-                "id": 101,
-                "title": "Modern Apartment in Surry Hills",
-                "price": 750000,
-                "address": "123 Main Street, Surry Hills NSW 2010",
-                "suburb": "Surry Hills",
-                "bedrooms": 2,
-                "bathrooms": 1,
-                "property_type": "apartment",
-                "images": ["https://cdn.cloud.com/img1.jpg"],
-                "created_at": "2026-05-15T10:00:00Z"
-            }
-        ],
-        "pagination": {
-            "page": 1,
-            "limit": 12,
-            "total": 45,
-            "total_pages": 4
-        }
+  "id": "uuid",
+  "status": "confirmed",
+  "total_amount": 89.97,
+  "notes": "Leave at door",
+  "items": [
+    {
+      "product_id": "uuid",
+      "product_name": "Product Name",
+      "quantity": 2,
+      "unit_price": 29.99,
+      "subtotal": 59.98
     }
+  ],
+  "created_at": "2026-05-30T09:00:00Z"
 }
-4. Create Listing
-http
-POST /listings
-Request Body:
+```
 
-json
+---
+
+#### `POST /orders`
+
+Create a new order.
+
+**Auth required:** Yes
+
+**Request Body**
+
+```json
 {
-    "title": "Beautiful Family Home",
-    "description": "3 bedroom house with large backyard",
-    "price": 850000,
-    "address": "456 Oak Street, Parramatta NSW 2150",
-    "bedrooms": 3,
-    "bathrooms": 2,
-    "car_spaces": 2,
-    "property_type": "house"
+  "items": [
+    { "product_id": "uuid", "quantity": 2 },
+    { "product_id": "uuid", "quantity": 1 }
+  ],
+  "notes": "Leave at door"
 }
-Validation Rules:
+```
 
-Field	Rule
-title	Required, min 5 chars, max 255 chars
-description	Optional, max 5000 chars
-price	Required, must be > 0
-address	Required, max 500 chars
-bedrooms	Required, must be >= 0
-bathrooms	Required, must be >= 0
-car_spaces	Required, must be >= 0
-property_type	Required, must be valid type
-Response (201 Created):
+**Response `201 Created`** — full order object.
 
-json
+---
+
+#### `PATCH /orders/:id/status` *(Admin only)*
+
+Update order status.
+
+**Auth required:** Yes (role: `admin`)
+
+**Request Body**
+
+```json
+{ "status": "shipped" }
+```
+
+**Response `200 OK`** — updated order object.
+
+---
+
+#### `DELETE /orders/:id`
+
+Cancel a pending order.
+
+**Auth required:** Yes (owner only, status must be `pending`)  
+**Response:** `204 No Content`
+
+---
+
+### Review Endpoints
+
+#### `GET /products/:id/reviews`
+
+List all reviews for a product.
+
+**Auth required:** No
+
+**Query Parameters**
+
+| Parameter | Type    | Description             | Default  |
+|-----------|---------|-------------------------|----------|
+| `page`    | integer | Page number             | `1`      |
+| `limit`   | integer | Reviews per page        | `10`     |
+| `sort`    | string  | `newest` or `top_rated` | `newest` |
+
+**Response `200 OK`**
+
+```json
 {
-    "success": true,
-    "message": "Listing created successfully",
-    "listing": {
-        "id": 101,
-        "title": "Beautiful Family Home",
-        "price": 850000,
-        "address": "456 Oak Street, Parramatta NSW 2150",
-        "lat": -33.8170,
-        "lng": 151.0035,
-        "status": "active",
-        "created_at": "2026-05-16T10:00:00Z"
+  "data": [
+    {
+      "id": "uuid",
+      "user": { "id": "uuid", "first_name": "Jane" },
+      "rating": 5,
+      "title": "Excellent product",
+      "body": "Really happy with this purchase.",
+      "created_at": "2026-05-28T08:00:00Z"
     }
+  ],
+  "meta": { "total": 12, "average_rating": 4.3 }
 }
-5. Update Listing
-http
-PUT /listings/:id
-Request Body: (all fields optional)
+```
 
-json
+---
+
+#### `POST /products/:id/reviews`
+
+Submit a review for a product.
+
+**Auth required:** Yes (must have purchased the product)
+
+**Request Body**
+
+```json
 {
-    "title": "Updated Title",
-    "price": 875000,
-    "status": "sold"
+  "rating": 5,
+  "title": "Excellent product",
+  "body": "Really happy with this purchase."
 }
-Response (200 OK):
+```
 
-json
+**Response `201 Created`** — full review object.
+
+---
+
+#### `DELETE /reviews/:id`
+
+Delete own review.
+
+**Auth required:** Yes (owner or admin)  
+**Response:** `204 No Content`
+
+---
+
+## Validation Rules
+
+### User / Auth
+
+| Field        | Rules                                                                 |
+|--------------|-----------------------------------------------------------------------|
+| `email`      | Required · Valid email format · Max 255 chars · Unique                |
+| `password`   | Required · Min 8 chars · ≥1 uppercase · ≥1 digit · ≥1 special char  |
+| `first_name` | Optional · Max 100 chars · Letters, hyphens, spaces only             |
+| `last_name`  | Optional · Max 100 chars · Letters, hyphens, spaces only             |
+| `phone`      | Optional · E.164 format (e.g. `+61400000000`)                        |
+
+---
+
+### Product
+
+| Field         | Rules                                                   |
+|---------------|---------------------------------------------------------|
+| `name`        | Required · Min 2 chars · Max 255 chars                  |
+| `price`       | Required · Numeric · ≥ 0 · Max 2 decimal places         |
+| `stock`       | Required · Integer · ≥ 0                                |
+| `category_id` | Optional · Must reference valid category UUID            |
+| `description` | Optional · Max 5000 chars                               |
+| `tags`        | Optional · Array of strings · Each tag max 50 chars     |
+| `is_published`| Optional · Boolean · Default `false`                    |
+
+---
+
+### Order
+
+| Field        | Rules                                                          |
+|--------------|----------------------------------------------------------------|
+| `items`      | Required · Non-empty array · Min 1 item                        |
+| `product_id` | Required per item · Valid UUID · Product must be published      |
+| `quantity`   | Required per item · Integer · ≥ 1 · ≤ available stock          |
+| `notes`      | Optional · Max 500 chars                                       |
+| `status`     | Required for updates · One of allowed enum values              |
+
+---
+
+### Review
+
+| Field    | Rules                                          |
+|----------|------------------------------------------------|
+| `rating` | Required · Integer · Between 1 and 5           |
+| `title`  | Optional · Max 150 chars                       |
+| `body`   | Optional · Max 2000 chars                      |
+| Unique   | One review per user per product (enforced in DB)|
+
+---
+
+## Error Handling
+
+All errors follow a consistent JSON structure:
+
+```json
 {
-    "success": true,
-    "message": "Listing updated successfully",
-    "listing": {
-        "id": 101,
-        "title": "Updated Title",
-        "price": 875000,
-        "status": "sold",
-        "updated_at": "2026-05-16T11:00:00Z"
-    }
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request validation failed.",
+    "details": [
+      { "field": "email", "message": "Must be a valid email address." },
+      { "field": "password", "message": "Must be at least 8 characters." }
+    ]
+  }
 }
-6. Delete Listing
-http
-DELETE /listings/:id
-Response (200 OK):
+```
 
-json
-{
-    "success": true,
-    "message": "Listing deleted successfully"
-}
-7. Upload Listing Image
-http
-POST /listings/:id/images
-Request: multipart/form-data with file field image
+### Standard HTTP Status Codes
 
-Constraints:
+| Code  | Meaning                  | When Used                                              |
+|-------|--------------------------|--------------------------------------------------------|
+| `200` | OK                       | Successful GET / PATCH                                 |
+| `201` | Created                  | Successful POST (resource created)                     |
+| `204` | No Content               | Successful DELETE                                      |
+| `400` | Bad Request              | Malformed JSON or missing required fields              |
+| `401` | Unauthorized             | Missing or invalid JWT token                           |
+| `403` | Forbidden                | Authenticated but insufficient role/permission         |
+| `404` | Not Found                | Resource does not exist                                |
+| `409` | Conflict                 | Duplicate record (e.g. email already registered)       |
+| `422` | Unprocessable Entity     | Validation rules failed (see `details`)                |
+| `429` | Too Many Requests        | Rate limit exceeded                                    |
+| `500` | Internal Server Error    | Unexpected server error                                |
 
-Max file size: 10MB
+### Error Code Reference
 
-Allowed formats: JPEG, PNG, WebP
+| `code`                | Description                                   |
+|-----------------------|-----------------------------------------------|
+| `VALIDATION_ERROR`    | One or more fields failed validation          |
+| `UNAUTHORIZED`        | Authentication required                       |
+| `FORBIDDEN`           | Action not permitted for this role            |
+| `NOT_FOUND`           | Requested resource not found                  |
+| `DUPLICATE_ENTRY`     | Unique constraint violation                   |
+| `INSUFFICIENT_STOCK`  | Order quantity exceeds available product stock |
+| `RATE_LIMITED`        | Too many requests — try again later           |
+| `INTERNAL_ERROR`      | Unexpected server-side failure                |
 
-Max 5 images per listing
+---
 
-Response (201 Created):
+## Glossary
 
-json
-{
-    "success": true,
-    "message": "Image uploaded successfully",
-    "image": {
-        "id": 501,
-        "url": "https://cdn.cloud.com/listings/101/image1.jpg",
-        "display_order": 1
-    }
-}
-8. Get Favourites
-http
-GET /favourites
-Response (200 OK):
+| Term          | Definition                                                                 |
+|---------------|----------------------------------------------------------------------------|
+| **UUID**      | Universally Unique Identifier — used as primary key for all entities        |
+| **JWT**       | JSON Web Token — stateless auth token returned on login                    |
+| **Slug**      | URL-friendly version of a name (e.g. `my-product-name`)                   |
+| **Soft Delete**| Marking a record as inactive rather than removing it from the database    |
+| **TIMESTAMPTZ**| PostgreSQL timezone-aware timestamp (stored in UTC)                      |
+| **E.164**     | International phone number format standard (e.g. `+61400000000`)          |
 
-json
-{
-    "success": true,
-    "data": {
-        "favourites": [
-            {
-                "id": 201,
-                "listing": {
-                    "id": 101,
-                    "title": "Beautiful Family Home",
-                    "price": 850000,
-                    "suburb": "Parramatta"
-                },
-                "saved_at": "2026-05-16T09:00:00Z"
-            }
-        ]
-    }
-}
-9. Save Listing to Favourites
-http
-POST /favourites/:listingId
-Response (201 Created):
+---
 
-json
-{
-    "success": true,
-    "message": "Listing saved to favourites"
-}
-10. Remove from Favourites
-http
-DELETE /favourites/:listingId
-Response (200 OK):
+*Week 5 Deliverable · Last updated: May 2026 · Maintained by the engineering team*
 
-json
-{
-    "success": true,
-    "message": "Listing removed from favourites"
-}
-11. Agent Dashboard
-http
-GET /dashboard/agent
-Response (200 OK):
-
-json
-{
-    "success": true,
-    "data": {
-        "total_listings": 12,
-        "active_listings": 8,
-        "sold_listings": 3,
-        "rented_listings": 1,
-        "total_views": 2450,
-        "recent_listings": [
-            {
-                "id": 101,
-                "title": "Modern Apartment",
-                "views": 320,
-                "created_at": "2026-05-10T00:00:00Z"
-            }
-        ]
-    }
-}
-12. Admin Dashboard
-http
-GET /dashboard/admin
-Response (200 OK):
-
-json
-{
-    "success": true,
-    "data": {
-        "total_users": 150,
-        "total_agents": 25,
-        "total_listings": 320,
-        "active_listings": 280,
-        "total_views": 18750,
-        "weekly_trend": {
-            "users_registered": [5, 8, 12, 7, 10, 15, 9],
-            "listings_created": [10, 12, 8, 14, 11, 13, 16]
-        }
-    }
-}
-3. HTTP Status Codes
-Status Code	Meaning	When Used
-200	OK	Successful GET, PUT, DELETE requests
-201	Created	Successful POST requests
-400	Bad Request	Invalid input, validation failed
-401	Unauthorized	Missing or invalid JWT token
-403	Forbidden	Authenticated but not authorised
-404	Not Found	Resource does not exist
-409	Conflict	Duplicate email, etc.
-500	Internal Server Error	Server-side error
-4. Error Response Format
-json
-{
-    "success": false,
-    "error": {
-        "code": "VALIDATION_ERROR",
-        "message": "Invalid input provided",
-        "details": [
-            {
-                "field": "email",
-                "message": "Email is required"
-            },
-            {
-                "field": "password",
-                "message": "Password must be at least 8 characters"
-            }
-        ]
-    }
-}
-5. Validation Rules Summary
-Field	Validation
-email	Required, valid format, max 255
-password	Required, min 8 chars, at least 1 number
-full_name	Required, min 2 chars, max 100
-title	Required, min 5 chars, max 255
-price	Required, > 0
-address	Required, max 500
-bedrooms	Required, >= 0
-bathrooms	Required, >= 0
-property_type	Required, must be valid type
-image	Max 10MB, JPEG/PNG/WebP
-6. Deliverable Checklist
-Database schema designed (5 tables)
-
-Entity relationships defined (1:N and M:N)
-
-Indexes for performance defined
-
-REST API endpoints designed (16 endpoints)
-
-Request/response formats documented
-
-Validation rules defined
-
-HTTP status codes documented
-
-Error response format defined
-
-Next Step
-Proceed to Weeks 6-7 – Backend Development to implement the database schema and API endpoints.
